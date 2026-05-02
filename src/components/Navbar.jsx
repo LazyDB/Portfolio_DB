@@ -21,6 +21,7 @@ export default function Navbar() {
           <NavLink to="/projects">Projects</NavLink>
           <NavLink to="/resume">Resume</NavLink>
           <NavLink to="/contact">Contact Me</NavLink>
+          <NavLink to="/game">Game</NavLink>
         </div>
 
         <button
@@ -62,6 +63,9 @@ export default function Navbar() {
         </NavLink>
         <NavLink to="/contact" onClick={closeSidebar}>
           Contact Me
+        </NavLink>
+        <NavLink to="/game" onClick={closeSidebar}>
+          Game
         </NavLink>
       </aside>
     </>

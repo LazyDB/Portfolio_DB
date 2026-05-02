@@ -799,3 +799,126 @@ h2 {
   object-fit: contain;
   border-radius: 10px;
 }
+
+
+.game-page {
+  min-height: calc(100vh - 76px);
+}
+
+.game-card {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(137, 54, 245, 0.35);
+  box-shadow: 0 24px 90px rgba(137, 54, 245, 0.18);
+}
+
+.game-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.game-stats div {
+  flex: 1;
+  padding: 18px;
+  border-radius: 18px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.game-stats span {
+  display: block;
+  color: #bdbdbd;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.game-stats strong {
+  color: #ffffff;
+  font-size: 28px;
+}
+
+.game-area {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(137, 54, 245, 0.3), transparent 35%),
+    linear-gradient(135deg, #111111, #1a1a1a);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.orb {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border: none;
+  border-radius: 50%;
+  background: #8936f5;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 20px rgba(137, 54, 245, 0.9),
+    0 0 50px rgba(137, 54, 245, 0.55);
+  animation: pulseOrb 0.9s infinite alternate;
+}
+
+@keyframes pulseOrb {
+  from {
+    scale: 1;
+  }
+
+  to {
+    scale: 1.12;
+  }
+}
+
+.game-message {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.game-message h2 {
+  color: #ffffff;
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.game-message p {
+  color: #bdbdbd;
+}
+
+.game-btn {
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .game-card {
+    padding: 20px;
+  }
+
+  .game-stats {
+    flex-direction: column;
+  }
+
+  .game-area {
+    height: 330px;
+  }
+
+  .orb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .game-message h2 {
+    font-size: 28px;
+  }
+}
