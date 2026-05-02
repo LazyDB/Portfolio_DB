@@ -1157,6 +1157,36 @@ main {
     opacity: 0;
   }
 }
+.game-area {
+  cursor: url("/assets/game-cursor.svg") 24 24, crosshair;
+}
+
+.game-area .orb {
+  cursor: url("/assets/game-cursor.svg") 24 24, crosshair;
+}
+
+.game-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.game-actions .game-btn,
+.game-actions .leaderboard-btn {
+  width: fit-content;
+}
+
+.leaderboard-btn {
+  border-color: rgba(137, 54, 245, 0.45);
+}
+
+@media (max-width: 680px) {
+  .game-actions .game-btn,
+  .game-actions .leaderboard-btn {
+    width: 100%;
+  }
+}
 
 
 /* ================================

@@ -57,7 +57,7 @@ export default function Contact() {
     <main className="page contact-page">
       <section className="section-heading">
         <p className="eyebrow">Contact Me</p>
-        <h1>Let’s build something together.</h1>
+        <h2>Let’s build something together.</h2>
         <p>
           Have a project, job opportunity, or collaboration in mind? Send me a
           message directly from here.

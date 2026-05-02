@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   addDoc,
   collection,
@@ -17,19 +17,58 @@ export default function Game() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
   const [scoreSaved, setScoreSaved] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
   const [error, setError] = useState("");
   const [orbPosition, setOrbPosition] = useState({ top: 50, left: 50 });
 
+  const audioContextRef = useRef(null);
+  const savingScoreRef = useRef(false);
+
+  const playTingSound = () => {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContext) return;
+
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext();
+    }
+
+    const audioContext = audioContextRef.current;
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(900, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      1400,
+      audioContext.currentTime + 0.08
+    );
+
+    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.18
+    );
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.18);
+  };
+
   const moveOrb = () => {
     const top = Math.floor(Math.random() * 75) + 8;
     const left = Math.floor(Math.random() * 75) + 8;
+
     setOrbPosition({ top, left });
   };
 
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     setLoadingLeaderboard(true);
+    setError("");
 
     try {
       const leaderboardQuery = query(
@@ -40,22 +79,33 @@ export default function Game() {
 
       const snapshot = await getDocs(leaderboardQuery);
 
-      const scores = snapshot.docs.map((doc) => ({
+      const topScores = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      setLeaderboard(scores);
+      setLeaderboard(topScores);
     } catch (err) {
       console.error(err);
       setError("Could not load leaderboard.");
     } finally {
       setLoadingLeaderboard(false);
     }
+  }, []);
+
+  const handleViewLeaderboard = async () => {
+    const nextState = !showLeaderboard;
+    setShowLeaderboard(nextState);
+
+    if (nextState) {
+      await fetchLeaderboard();
+    }
   };
 
-  const saveScore = async () => {
-    if (scoreSaved) return;
+  const saveScore = useCallback(async () => {
+    if (scoreSaved || savingScoreRef.current) return;
+
+    savingScoreRef.current = true;
 
     try {
       await addDoc(collection(db, "gameScores"), {
@@ -65,12 +115,13 @@ export default function Game() {
       });
 
       setScoreSaved(true);
-      fetchLeaderboard();
+      setShowLeaderboard(true);
+      await fetchLeaderboard();
     } catch (err) {
       console.error(err);
       setError("Could not save your score.");
     }
-  };
+  }, [playerName, score, scoreSaved, fetchLeaderboard]);
 
   const startGame = () => {
     const cleanName = playerName.trim();
@@ -85,6 +136,8 @@ export default function Game() {
     setTimeLeft(30);
     setGameFinished(false);
     setScoreSaved(false);
+    setShowLeaderboard(false);
+    savingScoreRef.current = false;
     setGameStarted(true);
     moveOrb();
   };
@@ -92,6 +145,7 @@ export default function Game() {
   const handleOrbClick = () => {
     if (!gameStarted || timeLeft === 0) return;
 
+    playTingSound();
     setScore((prevScore) => prevScore + 1);
     moveOrb();
   };
@@ -118,7 +172,7 @@ export default function Game() {
     if (gameFinished && !scoreSaved) {
       saveScore();
     }
-  }, [gameFinished, scoreSaved]);
+  }, [gameFinished, scoreSaved, saveScore]);
 
   return (
     <main className="page game-page">
@@ -126,7 +180,8 @@ export default function Game() {
         <p className="eyebrow">Mini Game</p>
         <h1>Catch the Purple Orb</h1>
         <p>
-          Enter your name, catch the orb, and see your score on the leaderboard.
+          Enter your name, catch the orb, and check the top 10 scores on the
+          leaderboard.
         </p>
       </section>
 
@@ -162,7 +217,7 @@ export default function Game() {
           </div>
         </div>
 
-        <div className="game-area">
+        <div className={gameStarted ? "game-area game-active" : "game-area"}>
           {gameStarted && timeLeft > 0 && (
             <button
               className="orb"
@@ -193,16 +248,25 @@ export default function Game() {
         </div>
 
         {!gameStarted && (
-          <button className="primary-btn game-btn" onClick={startGame}>
-            {gameFinished ? "Play Again" : "Start Game"}
-          </button>
+          <div className="game-actions">
+            <button className="primary-btn game-btn" onClick={startGame}>
+              {gameFinished ? "Play Again" : "Start Game"}
+            </button>
+
+            <button
+              className="ghost-btn leaderboard-btn"
+              onClick={handleViewLeaderboard}
+            >
+              {showLeaderboard ? "Hide Leaderboard" : "View Leaderboard"}
+            </button>
+          </div>
         )}
 
         {error && <p className="game-error">{error}</p>}
 
-        {gameFinished && (
+        {showLeaderboard && (
           <section className="leaderboard">
-            <h2>Leaderboard</h2>
+            <h2>Top 10 Leaderboard</h2>
 
             {loadingLeaderboard ? (
               <p>Loading leaderboard...</p>
@@ -210,7 +274,7 @@ export default function Game() {
               <p>No scores yet.</p>
             ) : (
               <div className="leaderboard-list">
-                {leaderboard.map((item, index) => (
+                {leaderboard.slice(0, 10).map((item, index) => (
                   <div className="leaderboard-row" key={item.id}>
                     <span>#{index + 1}</span>
                     <strong>{item.name}</strong>
