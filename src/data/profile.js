@@ -59,46 +59,52 @@ export const profile = {
     "Adobe XD",
   ],
   projects: [
-    {
-      title: "UrbanHelp",
-      subtitle: "Service Marketplace Web App",
-      period: "Dec 2023 - Mar 2024",
-      description:
-        "A service marketplace that connects people needing help with tasks such as cleaning and plumbing to available workers.",
-      tech: ["React", "Node.js", "MongoDB", "REST APIs"],
-      highlights: [
-        "Designed a practical customer-to-worker booking flow.",
-        "Built with a full-stack JavaScript architecture.",
-        "Focused on usability, service discovery, and scalable data models.",
-      ],
-    },
-    {
-      title: "Orbit",
-      subtitle: "Store Locator and Shopping App",
-      period: "Jun 2021 - Apr 2022",
-      description:
-        "A mobile shopping platform where users can log in, find favourite stores, contact them, and complete in-app payments.",
-      tech: ["Flutter", "Dart", "Node.js", "MongoDB"],
-      highlights: [
-        "Created a mobile-first shopping and store discovery experience.",
-        "Connected app flows to backend services.",
-        "Supported customer login, store browsing, and payment-oriented journeys.",
-      ],
-    },
-    {
-      title: "JobsNepal",
-      subtitle: "Job Search Portal",
-      period: "Jan 2021 - Apr 2021",
-      description:
-        "A job search portal concept focused on helping users explore employment opportunities and connect with relevant roles.",
-      tech: ["Flutter", "Dart", "Node.js", "MongoDB"],
-      highlights: [
-        "Built structured job browsing flows.",
-        "Designed with a simple candidate-focused interface.",
-        "Used backend APIs for role and user data handling.",
-      ],
-    },
-  ],
+  {
+    title: "UrbanHelp",
+    subtitle: "Service Marketplace Web App",
+    period: "Dec 2023 - Mar 2024",
+    image: "/assets/job-tracker.jpg",
+    github: "https://github.com/LazyDB/urbanhelp",
+    description:
+      "A service marketplace that connects people needing help with tasks such as cleaning and plumbing to available workers.",
+    tech: ["React", "Node.js", "MongoDB", "REST APIs"],
+    highlights: [
+      "Designed a practical customer-to-worker booking flow.",
+      "Built with a full-stack JavaScript architecture.",
+      "Focused on usability, service discovery, and scalable data models.",
+    ],
+  },
+  {
+    title: "Orbit",
+    subtitle: "Store Locator and Shopping App",
+    period: "Jun 2021 - Apr 2022",
+    image: "/assets/orbit.png",
+    github: "https://github.com/LazyDB/orbit",
+    description:
+      "A mobile shopping platform where users can log in, find favourite stores, contact them, and complete in-app payments.",
+    tech: ["Flutter", "Dart", "Node.js", "MongoDB"],
+    highlights: [
+      "Created a mobile-first shopping and store discovery experience.",
+      "Connected app flows to backend services.",
+      "Supported customer login, store browsing, and payment-oriented journeys.",
+    ],
+  },
+  {
+    title: "JobsNepal",
+    subtitle: "Job Search Portal",
+    period: "Jan 2021 - Apr 2021",
+    image: "/assets/jobsnepal.png",
+    github: "https://github.com/LazyDB/jobsnepal",
+    description:
+      "A job search portal concept focused on helping users explore employment opportunities and connect with relevant roles.",
+    tech: ["Flutter", "Dart", "Node.js", "MongoDB"],
+    highlights: [
+      "Built structured job browsing flows.",
+      "Designed with a simple candidate-focused interface.",
+      "Used backend APIs for role and user data handling.",
+    ],
+  },
+],
   research: {
     title: "Designing Gamified E-Learning Experiences through Learner Motivation",
     url: "https://www.researchgate.net/publication/388592107_Designing_Gamified_E-Learning_Experiences_through_Learner_Motivation",
